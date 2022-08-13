@@ -45,10 +45,8 @@ const UserModal = ({
     if (gender) obj = { ...obj, gender };
     if (selectedItem?.id) obj = { ...obj, id: selectedItem?.id };
     if (phones.length > 0) obj = { ...obj, phones };
-    console.log("obj", obj);
     return obj;
   }
-  console.log("selected", selectedItem);
   const getList = () => {
     fetch("https://62cf30a0486b6ce82653e89a.mockapi.io/userList")
       .then((response) => response.json())

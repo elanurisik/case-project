@@ -13,7 +13,7 @@ const Users = () => {
   const [selectedItem, setSelectedItem] = useState();
   const [searchValue, setSearchValue] = useState("");
   const [copyData, setCopyData] = useState([]);
-  const [gender, setGender] = useState();
+  const [gender, setGender] = useState("Tümü");
   const head = [
     { name: "" },
     { name: "Ad", sort: true },
@@ -22,41 +22,28 @@ const Users = () => {
     { name: "Telefon No" },
     { name: "" },
   ];
-
-  const multiFilter = () => {
-    let copyArray = [...userData];
-    if (searchValue) {
-      copyArray = copyArray?.filter(
-        (item) =>
-          item?.fullName
-            .toLowerCase()
-            .search(searchValue.toLowerCase().trim()) !== -1
-      );
-    }
-    if (gender) {
-      copyArray = copyArray?.filter((item) => item.gender === gender);
-    }
-    if (!copyArray.length || gender === "Tümü" || searchValue.length === 0) {
-      setUserData(copyData);
-    }
-    setUserData(copyArray);
-    console.log("copyArray", copyArray);
-  };
   useEffect(() => {
-    multiFilter();
-    if (gender === "Tümü" || searchValue.length === 0) setUserData(copyData);
-  }, [searchValue, gender]);
+    if (gender === "Tümü") {
+      setCopyData(userData);
+    } else {
+      setCopyData(userData?.filter((item) => item.gender === gender));
+    }
+  }, [gender, userData]);
 
-  console.log("searchValue", searchValue);
-  console.log("copyData", copyData);
-  console.log("userData", userData);
+  const filtered = copyData?.filter((entry) =>
+    Object.values(entry || {})?.some(
+      (val) =>
+        typeof val === "string" &&
+        val.toLowerCase().includes(searchValue.toLowerCase())
+    )
+  );
 
   useEffect(() => {
     fetch("https://62cf30a0486b6ce82653e89a.mockapi.io/userList")
       .then((response) => response.json())
       .then((data) => {
         setUserData(data);
-        setCopyData(data);
+        // setCopyData(data);
       });
   }, []);
 
@@ -92,7 +79,7 @@ const Users = () => {
       />
       <TableComp
         tableHeader={head}
-        array={userData}
+        array={filtered}
         setter={setUserData}
         setSearchValue={setSearchValue}
         fieldName="fullName"
