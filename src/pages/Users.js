@@ -12,14 +12,41 @@ const Users = () => {
   const [userData, setUserData] = useState([]);
   const [selectedItem, setSelectedItem] = useState();
   const [searchValue, setSearchValue] = useState("");
-  const head = ["", "Ad", "Soyad", "E-Posta", "Telefon No", ""];
-  const filtered = userData?.filter((entry) =>
-    Object.values(entry || {})?.some(
-      (val) =>
-        typeof val === "string" &&
-        val.toLowerCase().includes(searchValue.toLowerCase())
-    )
-  );
+  const [gender, setGender] = useState();
+  const head = [
+    { name: "" },
+    { name: "Ad", sort: true },
+    { name: "Cinsiyet" },
+    { name: "E-Posta" },
+    { name: "Telefon No" },
+    { name: "" },
+  ];
+
+  const multiFilter = () => {
+    let copyArray = [...userData];
+    if (searchValue) {
+      copyArray = copyArray?.filter(
+        (item) =>
+          item?.fullName
+            .toLowerCase()
+            .search(searchValue.toLowerCase().trim()) !== -1
+      );
+    }
+    if (gender) {
+      copyArray = copyArray?.filter((item) => item.gender === gender);
+    }
+    if (!copyArray.length) setUserData(userData);
+    setUserData(copyArray);
+    console.log("copyArray", copyArray);
+  };
+  useEffect(() => {
+    multiFilter();
+  }, [searchValue, gender]);
+
+  console.log("searchValue", searchValue);
+  console.log("gender", gender);
+  console.log("userData", userData);
+
   useEffect(() => {
     fetch("https://62cf30a0486b6ce82653e89a.mockapi.io/userList")
       .then((response) => response.json())
@@ -40,11 +67,11 @@ const Users = () => {
     )
       .then((response) => response.json())
       .then((data) => {
-        const copyArray = [...filtered];
+        const copyArray = [...userData];
         setUserData(copyArray?.filter((item) => item.id !== id));
       });
   };
-  console.log("selectedItem", selectedItem);
+
   return (
     <Container>
       <Title
@@ -58,8 +85,13 @@ const Users = () => {
       />
       <TableComp
         tableHeader={head}
-        array={filtered}
+        array={userData}
+        setter={setUserData}
         setSearchValue={setSearchValue}
+        fieldName="fullName"
+        option={["Kadın", "Erkek", "Tümü"]}
+        setFilter={setGender}
+        filter={gender}
         body={(item, index) => (
           <UserList
             item={item}
@@ -79,7 +111,7 @@ const Users = () => {
           setter={setOpenModal}
           isUpdate={isUpdate}
           setUserData={setUserData}
-          userData={filtered}
+          userData={userData}
           selectedItem={selectedItem}
         />
       )}

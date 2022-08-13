@@ -1,7 +1,13 @@
 import { TextField } from "@mui/material";
 import React from "react";
 
-const EmailComp = ({ email, setEmail, errorEmailText, setErrorEmailText }) => {
+const EmailComp = ({
+  email,
+  setEmail,
+  errorEmailText,
+  setErrorEmailText,
+  // variant = "standart",
+}) => {
   const handleOnChange = (e) => {
     setEmail(e.target.value);
     const validEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
@@ -19,7 +25,7 @@ const EmailComp = ({ email, setEmail, errorEmailText, setErrorEmailText }) => {
       label="E-Posta"
       autoComplete={false}
       name="password"
-      variant="standard"
+      variant="outlined"
       helperText={errorEmailText}
     />
   );

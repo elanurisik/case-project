@@ -95,7 +95,7 @@ const Login = () => {
                   type="password"
                   label="Şifre"
                   fullWidth
-                  variant="standard"
+                  variant="outlined"
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>

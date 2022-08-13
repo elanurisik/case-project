@@ -8,8 +8,8 @@ const UserList = ({ item, onClickEdit, onClickDelete }) => {
       <TableCell>
         <Avatar src={item?.avatar}></Avatar>
       </TableCell>
-      <TableCell>{item?.name}</TableCell>
-      <TableCell>{item?.surname}</TableCell>
+      <TableCell>{item?.fullName}</TableCell>
+      <TableCell>{item?.gender}</TableCell>
 
       <TableCell>{item?.email}</TableCell>
       <TableCell>

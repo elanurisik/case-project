@@ -5,8 +5,12 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
   Grid,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
 } from "@mui/material";
 import React from "react";
@@ -15,6 +19,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import NumberFormat from "react-number-format";
 import CloseIcon from "@mui/icons-material/Close";
+import EmailComp from "./EmailComp";
 const UserModal = ({
   open,
   handleClose,
@@ -25,24 +30,25 @@ const UserModal = ({
   userData,
   selectedItem,
 }) => {
-  const [name, setName] = useState(selectedItem?.name);
-  const [surname, setSurname] = useState(selectedItem?.surname);
+  const [fullName, setFullName] = useState(selectedItem?.fullName);
+  const [gender, setGender] = useState(selectedItem?.gender);
   const [email, setEmail] = useState(selectedItem?.email);
+  const [errorEmailText, setErrorEmailText] = useState("");
   const [phones, setPhones] = useState(
     selectedItem?.phones || [{ number: "" }]
   );
 
   function reqBody() {
     let obj = {};
-    if (name) obj = { ...obj, name };
+    if (fullName) obj = { ...obj, fullName };
     if (email) obj = { ...obj, email };
-    if (surname) obj = { ...obj, surname };
+    if (gender) obj = { ...obj, gender };
     if (selectedItem?.id) obj = { ...obj, id: selectedItem?.id };
     if (phones.length > 0) obj = { ...obj, phones };
     console.log("obj", obj);
     return obj;
   }
-
+  console.log("selected", selectedItem);
   const getList = () => {
     fetch("https://62cf30a0486b6ce82653e89a.mockapi.io/userList")
       .then((response) => response.json())
@@ -214,26 +220,35 @@ const UserModal = ({
           <Grid container direction="column" spacing={2}>
             <Grid item sx={{ mt: 2 }}>
               <TextField
-                label="Ad"
+                label="Ad Soyad"
                 fullWidth
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
               />
             </Grid>
             <Grid item>
-              <TextField
-                label="Soyad"
-                fullWidth
-                value={surname}
-                onChange={(e) => setSurname(e.target.value)}
-              />
+              <FormControl variant="outlined" fullWidth>
+                <InputLabel id="demo-simple-select-label">Cinsiyet</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={gender}
+                  fullWidth
+                  onChange={(e) => setGender(e.target.value)}
+                  label="Cinsiyet"
+                >
+                  <MenuItem value="Kadın">Kadın</MenuItem>
+                  <MenuItem value="Erkek">Erkek</MenuItem>
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item>
-              <TextField
-                label="E-mail"
-                fullWidth
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+              <EmailComp
+                variant="outlined"
+                email={email}
+                setEmail={setEmail}
+                errorEmailText={errorEmailText}
+                setErrorEmailText={setErrorEmailText}
               />
             </Grid>
             <Grid item>
