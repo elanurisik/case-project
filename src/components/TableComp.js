@@ -31,20 +31,31 @@ const TableComp = ({
   setter,
   filter,
   setFilter,
+  fullName,
 }) => {
   const [sort, setSort] = useState(false);
   const onClickSort = () => {
     if (sort) {
-      setter([...array].sort((a, b) => (a.fieldName > b.fieldName ? 1 : -1)));
+      setter(
+        [...array].sort((a, b) =>
+          a.fullName.toLowerCase() > b.fullName.toLowerCase() ? 1 : -1
+        )
+      );
       console.log(
         "az",
-        [...array].sort((a, b) => (a.fieldName > b.fieldName ? 1 : -1))
+        [...array].sort((a, b) =>
+          a.fullName.toLowerCase() > b.fullName ? 1 : -1
+        )
       );
     } else {
-      setter([...array].sort((a, b) => (a.fieldName > b.fieldName ? 1 : -1)));
+      setter(
+        [...array].sort((a, b) =>
+          a.fullName.toLowerCase() > b.fullName.toLowerCase() ? -1 : 1
+        )
+      );
       console.log(
         "za",
-        [...array].sort((a, b) => (a.fieldName > b.fieldName ? 1 : -1))
+        [...array].sort((a, b) => (a.fullName > b.fullName ? 1 : -1))
       );
     }
   };
