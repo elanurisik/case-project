@@ -12,6 +12,7 @@ const Users = () => {
   const [userData, setUserData] = useState([]);
   const [selectedItem, setSelectedItem] = useState();
   const [searchValue, setSearchValue] = useState("");
+  const [copyData, setCopyData] = useState([]);
   const [gender, setGender] = useState();
   const head = [
     { name: "" },
@@ -35,22 +36,28 @@ const Users = () => {
     if (gender) {
       copyArray = copyArray?.filter((item) => item.gender === gender);
     }
-    if (!copyArray.length) setUserData(userData);
+    if (!copyArray.length || gender === "Tümü" || searchValue.length === 0) {
+      setUserData(copyData);
+    }
     setUserData(copyArray);
     console.log("copyArray", copyArray);
   };
   useEffect(() => {
     multiFilter();
+    if (gender === "Tümü" || searchValue.length === 0) setUserData(copyData);
   }, [searchValue, gender]);
 
   console.log("searchValue", searchValue);
-  console.log("gender", gender);
+  console.log("copyData", copyData);
   console.log("userData", userData);
 
   useEffect(() => {
     fetch("https://62cf30a0486b6ce82653e89a.mockapi.io/userList")
       .then((response) => response.json())
-      .then((data) => setUserData(data));
+      .then((data) => {
+        setUserData(data);
+        setCopyData(data);
+      });
   }, []);
 
   const handleDelete = (id) => {
